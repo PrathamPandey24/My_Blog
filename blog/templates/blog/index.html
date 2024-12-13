@@ -1,0 +1,56 @@
+<!--structure of starting page which is extended version of base.html-->
+
+
+{% extends "base.html" %}
+{% load static %}
+
+{%block title %}
+My Blog
+{%endblock%}
+
+
+
+{%block css_files %}
+ <link rel=stylesheet href="{% static "blog/post.css"%}"/>  
+ <link rel=stylesheet href="{% static "blog/index.css"%}"/>
+{%endblock%}
+
+
+
+{%block content %}
+
+
+<section id="welcome">
+    <header>   
+        <img src="{% static "blog/1000064168.jpg"%}" alt="Pratham - The author of this blog" />
+        <h2>PRATHAM'S BLOG</h2>
+    </header>
+    <p>Hi, I am Pratham . Get to know me better through the things i love!</p>
+</section>
+
+<section id="latest-posts">
+    <h2>Latest Posts</h2>
+    <ul>
+        {% for post in posts %}
+            {% include "blog\includes\post.html" %}
+        {%endfor%}
+    </ul> 
+</section>
+
+<section id="about">
+    <h2>What I do</h2>
+    <p>
+        Travelling and Technologies enthusiast!
+
+        <br> developed by Pratham Pandey
+
+        <a href="https://www.linkedin.com/in/pratham-pandey-83b456249/?trk=opento_sprofile_details">  <br> My LinkdIn</a>
+
+        
+    </P>
+</section>
+
+
+
+{%endblock%}
+
