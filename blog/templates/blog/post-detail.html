@@ -13,22 +13,81 @@
 {%endblock%}
 
 {%block content %}
+
+ {%if comment_form.errors%}
+  <div id="alert">
+    <h2>comment wasnot saved !</h2>
+    <p>please check the comment form below the post and fix yours errors.</p>
+    <a href="#comment_form">Fix!</a>
+    </div>
+    {%endif%}
+
  <section id="summary">
-    <h2> {{ post.title }}</h2>
-    
-   
+    <h2>
+            {{ post.title }}  
+            {% for tag in post.tags.all %}
+            <span class="tacp">{{ tag.caption }}</span>
+            {% endfor %}
+
+
+         <div id="read-later">
+              <form action="{% url "read-later"%}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" value="{{post.id}}" name="post_id">
+              <button>
+               {% if saved_for_later %}
+                 Remove Read later
+               {% else %}
+               Read Later
+               {% endif %}              
+               </button>
+              </form>
+         </div>
+    </h2>
+
+
+
     <article id="mount">
-        <img  src="{% static 'blog/'|add:post.image_name %}" alt="{{post.title}}"  />
+        <img  src="{{post.image_name.url}}" alt="{{post.title}}"  />
         <address>By <a href="mailto:{{post.author.email_address}}"> {{post.author}}</a></address>
-        <div>
+        <div id="imdres">
             last updated on <time> <span class="bold"> {{post.date|date:"d M Y"}} </span></time>                                         
         </div>
     </article>
  </section>
 
+
  <main>
     {{post.content}}
  </main>
 
+ <section id="comments">
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <h1>Comments</h1>
+             <h2>{{comment.user_name  }}</h2>
+             <p>{{comment.text|linebreaks}}</p>
+
+        </li>
+        {% endfor %}
+    </ul>
+ </section>
+
+  <section  id="macm">
+    <h2>Your Comment</h2>
+   <form   action="{% url 'post-detail-page' post.slug %}" method="post">
+         {% csrf_token %}
+         
+     {% for form_field in comment_form %}
+      <div class="form-control {%if form_field.errors %}invalid{% endif %}">
+        {{form_field.label_tag}}
+        {{form_field}}
+        {{form_field.errors}}
+     </div>
+     {% endfor %}
+    <button>Add Comment</button>
+    </form>
+  </section>
 {% endblock %}
  
